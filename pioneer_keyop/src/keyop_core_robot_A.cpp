@@ -111,9 +111,8 @@ bool KeyOpCore::init()
   /*********************
    ** Publishers
    **********************/
-  std::string robotName;
-  nh.param<std::string>("robotName", robotName, "sim_p3at");
-  velocity_publisher_ = nh.advertise<geometry_msgs::Twist>("/" + robotName + "/cmd_vel", 1);
+
+  velocity_publisher_ = nh.advertise<geometry_msgs::Twist>("/Robot_A/rosaria/cmd_vel", 1);
   motor_power_publisher_ = nh.advertise<kobuki_msgs::MotorPower>("motor_power", 1);
 
   /*********************

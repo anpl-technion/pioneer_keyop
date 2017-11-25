@@ -111,10 +111,17 @@ bool KeyOpCore::init()
   /*********************
    ** Publishers
    **********************/
+
+  std::string node_name(ros::this_node::getName());
+  ROS_INFO_STREAM("Node name: " << ros::this_node::getName());
+  ROS_INFO_STREAM("Node namespace: " << ros::this_node::getNamespace());
+
+  std::string robot_name_param(node_name + "/robotName");
   std::string robotName;
   nh.param<std::string>("robotName", robotName, "sim_p3at");
   velocity_publisher_ = nh.advertise<geometry_msgs::Twist>("/" + robotName + "/cmd_vel", 1);
-  motor_power_publisher_ = nh.advertise<kobuki_msgs::MotorPower>("motor_power", 1);
+  motor_power_publisher_ = nh.advertise<kobuki_msgs::MotorPower>(std::string(node_name + "/motor_power"), 1);
+  
 
   /*********************
    ** Velocities
@@ -178,6 +185,7 @@ bool KeyOpCore::init()
     power_status = true;
   }
 
+  ROS_INFO_STREAM("Robot name: " << robotName);
   // start keyboard input thread
   thread.start(&KeyOpCore::keyboardInputLoop, *this);
   return true;
